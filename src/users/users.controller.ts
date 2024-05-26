@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Patch, Param, Query, Delete, UseIntercepto
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
-import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDTO } from './dtos/user.dto';
 
 @Controller('auth')
@@ -15,7 +15,7 @@ export class UsersController {
     }
 
     @Get('/:id')
-    @UseInterceptors(new SerializeInterceptor(UserDTO))
+    @Serialize(UserDTO)
     findUser(@Param('id') id: string) {
         return this.usersService.findOne(parseInt(id));
     }
