@@ -4,12 +4,15 @@ import { Observable, map } from "rxjs";
 import { UserDTO } from "src/users/dtos/user.dto";
 
 export class SerializeInterceptor implements NestInterceptor {
+    constructor(private dto: any) {
+
+    }
     intercept(context: ExecutionContext, handler: CallHandler<any>): Observable<any> {
         // code here will run before request handler (controller) starts its execution
 
         return handler.handle().pipe(
             map((data: any) => {
-                return plainToClass(UserDTO, data, {
+                return plainToClass(this.dto, data, {
                     excludeExtraneousValues: true,
                 })
             })
