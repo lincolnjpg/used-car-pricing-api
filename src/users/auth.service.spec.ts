@@ -9,9 +9,19 @@ describe('AuthService', () => {
     let fakeUsersService: Partial<UsersService>;
 
     beforeEach(async () => {
+        const users: User[] = [];
         fakeUsersService = {
-            find: () => Promise.resolve([]),
-            create: (email: string, password: string) => Promise.resolve({ id: 1, email, password } as User),
+            find: (email: string) => {
+                const filteredUsers = users.filter(user => user.email === email);
+
+                return Promise.resolve(filteredUsers);
+            },
+            create: (email: string, password: string) => {
+                const user = { id: Math.floor(Math.random() * 9999), email, password } as User;
+                users.push(user);
+                
+                return Promise.resolve(user);
+            }
         }
 
         const module = await Test.createTestingModule({
@@ -55,5 +65,20 @@ describe('AuthService', () => {
         await expect(service.signIn('test@test.com', 'asdf'))
             .rejects
             .toThrow(NotFoundException);
+    })
+
+    it('throws if an invalid password is provided', async () => {
+        fakeUsersService.find = () => Promise.resolve([{ email: 'test@test.com', password: 'asdf'} as User]);
+
+        await expect(
+            service.signIn('exception@test.com', '123')
+        ).rejects.toThrow(BadRequestException);        
+    })
+
+    it('returns a user if correct password is provided', async () => {
+        await service.signUp('any@teste.com', 'any');
+        const user = await service.signIn('any@teste.com', 'any');
+
+        expect(user).toBeDefined();
     })
 })
