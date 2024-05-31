@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { promises, unlink } from 'fs';
 
 describe('Authentication System', () => {
   let app: INestApplication;
@@ -13,6 +14,17 @@ describe('Authentication System', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  afterEach(async () => {
+    // resolve para o sqlite, que é apenas um arquivo
+    // ver como fazer isso de um jeito melhor para o caso geral (utilizando o que o framework oferece para isso)
+    console.log(process.cwd())
+    console.log(__dirname)
+    try {
+        await promises.unlink(`${process.cwd()}/test.sqlite`);
+    } catch (error) {        
+    }
   });
 
   it('handles a sign up request', () => {
