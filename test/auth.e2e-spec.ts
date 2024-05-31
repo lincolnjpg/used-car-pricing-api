@@ -18,14 +18,8 @@ describe('Authentication System', () => {
   });
 
   afterEach(async () => {
-    // resolve para o sqlite, que é apenas um arquivo
-    // ver como fazer isso de um jeito melhor para o caso geral (utilizando o que o framework oferece para isso)
-    console.log(process.cwd())
-    console.log(__dirname)
-    try {
-        await promises.unlink(`${process.cwd()}/test.sqlite`);
-    } catch (error) {        
-    }
+    const dataSource = app.get(DataSource)
+    await dataSource.createQueryBuilder().delete().from(User).execute();
   });
 
   it('handles a sign up request', () => {
