@@ -21,15 +21,15 @@ const cookieSession = require('cookie-session');
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
-            type: 'sqlite',
-            database: config.get<string>('DB_NAME'),
-            entities: [User, Report],
-            synchronize: true,
-          }
-      }      
+          type: 'sqlite',
+          database: config.get<string>('DB_NAME'),
+          entities: [User, Report],
+          synchronize: true,
+        };
+      },
     }),
-    UsersModule, 
-    ReportsModule
+    UsersModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -43,11 +43,14 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(
-      cookieSession({
-        keys: ['dquioeqw1928du']
-      })
-    ).forRoutes('*');
+    consumer
+      .apply(
+        cookieSession({
+          keys: [this.configService.get('COOKIE_KEY')],
+        }),
+      )
+      .forRoutes('*');
   }
 }
