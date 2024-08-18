@@ -1,5 +1,6 @@
-const dbConfig = {
+export const dbConfig = {
   synchronize: false,
+  migrations: ['migrations/*.js'],
 };
 
 switch (process.env.NODE_ENV) {
@@ -22,5 +23,3 @@ switch (process.env.NODE_ENV) {
   default:
     throw new Error('unknown environment');
 }
-
-module.exports = dbConfig;
