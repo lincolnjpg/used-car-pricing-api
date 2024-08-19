@@ -3,7 +3,7 @@ const { DataSource } = require('typeorm');
 const dataSourceOptions = {
   type: 'sqlite',
   database: 'db.sqlite',
-  entities: ['**/*.entity.js'],
+  entities: ['**/*.entity{.js,.ts}'],
   migrations: ['migrations/*.js'],
 };
 
