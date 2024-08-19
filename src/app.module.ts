@@ -7,7 +7,7 @@ import { ReportsModule } from './reports/reports.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-const { dataSourceOptions } = require('./datasource');
+const { dataSourceOptions } = require('./app.datasource');
 const cookieSession = require('cookie-session');
 
 @Module({
